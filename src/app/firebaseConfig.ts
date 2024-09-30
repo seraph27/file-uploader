@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -12,8 +11,11 @@ const firebaseConfig = {
   measurementId: "G-JCMBVS284X"
 };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const storage = getStorage(app);
+let app, storage;
+
+if (typeof window !== 'undefined') {
+  app = initializeApp(firebaseConfig);
+  storage = getStorage(app);
+}
 
 export {storage};

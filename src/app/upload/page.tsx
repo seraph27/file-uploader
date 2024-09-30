@@ -1,19 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState, ChangeEvent, useEffect } from "react";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebaseConfig";
+import { useState, ChangeEvent } from "react";
+import dynamic from 'next/dynamic';
+
+const FirebaseUploader = dynamic(() => import('./FirebaseUploader'), { ssr: false });
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false); // New state for client-side check
-
-  useEffect(() => {
-    setIsClient(true); // Set this to true once the component is rendered on the client side
-  }, []);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -21,44 +16,19 @@ export default function Upload() {
     }
   };
 
-  const handleUpload = async () => {
-    if (!file) return;
-
-    setUploading(true);
-    const storageRef = ref(storage, `images/${file.name}`);
-
-    try {
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      setUploadedUrl(url);
-      console.log("File Uploaded Successfully");
-    } catch (error) {
-      console.error("Error uploading the file", error);
-    } finally {
-      setUploading(false);
-    }
+  const handleUploadComplete = (url: string | null) => {
+    setUploadedUrl(url);
   };
 
-  if (!isClient) {
-    // Return null or some placeholder content when on the server
-    return null;
-  }
-
   return (
-    <div className="flex h-screen justify-center items-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
+    <div className="flex h-screen justify-center items-center">
+      <div className="p-8 rounded shadow-md w-full max-w-md text-center">
         <input
           type="file"
           onChange={handleFileChange}
           className="block w-full text-sm text-gray-500 mb-4"
         />
-        <button
-          onClick={handleUpload}
-          disabled={uploading}
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-4"
-        >
-          {uploading ? "Uploading..." : "Upload Image"}
-        </button>
+        <FirebaseUploader file={file} onUploadComplete={handleUploadComplete} />
 
         {uploadedUrl && (
           <div>
