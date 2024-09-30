@@ -1,23 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 
 export default function Upload() {
-  const [file, setFile] = useState<File | null>(null);  // Define the file state type
-  const [uploading, setUploading] = useState<boolean>(false); // State for the upload status
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null); // Store the uploaded image URL
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false); // New state for client-side check
 
-  // Event handler for file change with type annotation
+  useEffect(() => {
+    setIsClient(true); // Set this to true once the component is rendered on the client side
+  }, []);
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setFile(event.target.files[0]);  // Set the selected file in state
+      setFile(event.target.files[0]);
     }
   };
 
-  // Handle the upload logic with async/await
   const handleUpload = async () => {
     if (!file) return;
 
@@ -25,21 +28,25 @@ export default function Upload() {
     const storageRef = ref(storage, `images/${file.name}`);
 
     try {
-      // Upload the file to Firebase storage
       await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef); // Get the download URL of the uploaded file
+      const url = await getDownloadURL(storageRef);
       setUploadedUrl(url);
       console.log("File Uploaded Successfully");
     } catch (error) {
       console.error("Error uploading the file", error);
     } finally {
-      setUploading(false); // Set uploading back to false after completion
+      setUploading(false);
     }
   };
 
+  if (!isClient) {
+    // Return null or some placeholder content when on the server
+    return null;
+  }
+
   return (
-    <div className="flex h-screen justify-center items-center">
-      <div className="p-8 rounded shadow-md w-full max-w-md text-center">
+    <div className="flex h-screen justify-center items-center bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
         <input
           type="file"
           onChange={handleFileChange}
@@ -48,7 +55,7 @@ export default function Upload() {
         <button
           onClick={handleUpload}
           disabled={uploading}
-          className="py-2 px-4 rounded w-full mb-4"
+          className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-4"
         >
           {uploading ? "Uploading..." : "Upload Image"}
         </button>
