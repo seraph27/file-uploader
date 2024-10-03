@@ -26,7 +26,7 @@ export default function Upload() {
         <input
           type="file"
           onChange={handleFileChange}
-          className="block w-full text-sm text-gray-500 mb-4"
+          className="block w-full text-sm text-foreground mb-4"
         />
         <FirebaseUploader file={file} onUploadComplete={handleUploadComplete} />
 

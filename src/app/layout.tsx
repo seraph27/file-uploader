@@ -7,6 +7,8 @@ import {
 } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { NavigationMenuDemo } from "@/components/navbar";
+
 export default function RootLayout({
     children,
 }: {
@@ -22,6 +24,7 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
+                        <NavigationMenuDemo /> 
                         <SignedOut>
                             <SignInButton />
                         </SignedOut>
