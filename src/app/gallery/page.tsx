@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebaseConfig';
 import { useAuth } from "@clerk/nextjs";
+import { Button } from '@/components/ui/button';
 
 export default function Gallery() {
   const [images, setImages] = useState<string[]>([]);
@@ -45,6 +46,7 @@ export default function Gallery() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Button>asdsd</Button>
       <h1 className="text-3xl font-bold mb-6 text-center">Your Image Gallery</h1>
       {images.length === 0 ? (
         <p className="text-center">You haven't uploaded any images yet.</p>
