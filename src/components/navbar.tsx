@@ -3,6 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 
+import {
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
+
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import {
@@ -29,7 +37,6 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 function onNavChange() {
-    //added
     setTimeout(() => {
         const triggers = document.querySelectorAll(
             '.submenu-trigger[data-state="open"]'
@@ -46,54 +53,70 @@ function onNavChange() {
     });
 }
 
-export function NavigationMenuDemo() {
+export function NavigationBar() {
     return (
-        <div className="flex justify-center m-10">
-            <NavigationMenu onValueChange={onNavChange}>
-            <NavigationMenuList>
-                <NavigationMenuItem className="mr-4">
-                <NavigationMenuTrigger className="submenu-trigger">
-                    Home
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="flex justify-center">
-                    <ul className="gap-3 p-4 md:w-[400px] lg:w-[500px]">
-                    <li className="flex justify-center">
-                        <NavigationMenuLink asChild>
-                        <a
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                            href="/"
-                        >
-                            <Icons.logo className="h-6 w-full mx-auto" />
-                            <div className="mb-2 mt-4 text-lg font-medium text-center">
-                            file/uploader
-                            </div>
-                            <p className="text-sm leading-tight text-muted-foreground text-center">
-                            bruh bruh bruh bruh bruh bruh bruh bruh bruh bruh saoijd ojasidojiasjoida
-                            </p>
-                        </a>
-                        </NavigationMenuLink>
-                    </li>
-                    </ul>
-                </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                <NavigationMenuTrigger className="submenu-trigger">Features</NavigationMenuTrigger>
-                <NavigationMenuContent className="flex justify-center">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {components.map((component) => (
-                        <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                        >
-                        {component.description}
-                        </ListItem>
-                    ))}
-                    </ul>
-                </NavigationMenuContent>
-                </NavigationMenuItem>
-            </NavigationMenuList>
+        <div className="flex justify-between p-8">
+            <div className="w-7" />
+            <NavigationMenu
+                // className="sm:block hidden"
+                onValueChange={onNavChange}
+            >
+                <NavigationMenuList>
+                    <NavigationMenuItem className="mr-4">
+                        <NavigationMenuTrigger className="submenu-trigger">
+                            Home
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent className="flex justify-center">
+                            <ul className="gap-3 p-4 md:w-[400px] lg:w-[500px]">
+                                <li className="flex justify-center">
+                                    <NavigationMenuLink asChild>
+                                        <a
+                                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                            href="/"
+                                        >
+                                            <Icons.logo className="h-6 w-full mx-auto" />
+                                            <div className="mb-2 mt-4 text-lg font-medium text-center">
+                                                file/uploader
+                                            </div>
+                                            <p className="text-sm leading-tight text-muted-foreground text-center">
+                                                bruh bruh bruh bruh bruh bruh
+                                                bruh bruh bruh bruh saoijd
+                                                ojasidojiasjoida
+                                            </p>
+                                        </a>
+                                    </NavigationMenuLink>
+                                </li>
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger className="submenu-trigger">
+                            Features
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent className="flex justify-center">
+                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                {components.map((component) => (
+                                    <ListItem
+                                        key={component.title}
+                                        title={component.title}
+                                        href={component.href}
+                                    >
+                                        {component.description}
+                                    </ListItem>
+                                ))}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
             </NavigationMenu>
+            <SignedOut>
+                <SignInButton />
+            </SignedOut>
+            <SignedIn>
+                <div className="pl-4 flex items-center justify-center">
+                    <UserButton />
+                </div>
+            </SignedIn>
         </div>
     );
 }

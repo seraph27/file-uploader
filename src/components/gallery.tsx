@@ -56,7 +56,7 @@ const Gallery = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 h-[calc(100vh-100px)] flex items-center justify-center flex-col">
             <h1 className="text-3xl font-bold mb-6 text-center">
                 Your Image Gallery
             </h1>
@@ -65,7 +65,7 @@ const Gallery = () => {
                     You haven't uploaded any images yet.
                 </p>
             ) : (
-                <div className="flex justify-center">
+                <div className="flex justify-center px-12">
                     <Carousel className="w-full max-w-xs">
                         <CarouselContent>
                             {images.map((url, index) => (

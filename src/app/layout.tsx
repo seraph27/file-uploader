@@ -1,13 +1,7 @@
-import {
-    ClerkProvider,
-    SignInButton,
-    SignedIn,
-    SignedOut,
-    UserButton,
-} from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { NavigationMenuDemo } from "@/components/navbar";
+import { NavigationBar } from "@/components/navbar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export default function RootLayout({
     children,
@@ -17,20 +11,14 @@ export default function RootLayout({
     return (
         <ClerkProvider>
             <html lang="en">
-                <body>
+                <body className="min-h-screen">
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <NavigationMenuDemo /> 
-                        <SignedOut>
-                            <SignInButton />
-                        </SignedOut>
-                        <SignedIn>
-                            <UserButton />
-                        </SignedIn>
+                        <NavigationBar />
                         {children}
                     </ThemeProvider>
                 </body>
